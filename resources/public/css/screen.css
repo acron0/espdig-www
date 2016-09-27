@@ -1,0 +1,60 @@
+html {
+  overflow-y: scroll;
+}
+
+.level3 {
+  font-size: 1.2em;
+}
+
+.media-items {
+  border-bottom: 1px solid silver;
+  width: 100%;
+}
+
+.media-item {
+  border: 1px solid silver;
+  border-bottom: 0px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.media-item:hover {
+  background-color: greenyellow;
+}
+
+.media-item-label-container {
+  display: flex;
+  margin-left: 10px;
+}
+
+.media-item-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0px;
+}
+
+.widget-container {
+  min-height: 40px;
+  margin-top: 15px;
+  width: 30%;
+}
+
+.download-widget {
+  width: 100%;
+}
+
+.download-widget .dw-progress-container {
+  position: relative;
+}
+
+.download-widget .dw-progress-container .rc-progress-bar {
+  position: absolute;
+  left: 0px;
+  right: 32px;
+}
+
+.download-widget .dw-progress-container .rc-md-icon-button {
+  position: absolute;
+  right: 0;
+}
