@@ -20,6 +20,7 @@
                   (.getElementById js/document "app")))
 
 (defn ^:export init []
-  (re-frame/dispatch-sync [:initialize-db "data.json"])
+  (re-frame/dispatch-sync
+   [:initialize-db "data.json"])
   (dev-setup)
   (mount-root))

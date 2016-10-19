@@ -32,7 +32,8 @@
 (defn media-item [item]
   (fn [{:keys [media/name
                audio/url
-               media/author]}]
+               media/author] :as item}]
+    (println (keys item))
     [re-com/h-box
      :class "media-item"
      :justify :between
@@ -45,26 +46,26 @@
       [re-com/h-box
        :align :center
        :children
-       [[re-com/md-icon-button
-         :md-icon-name "zmdi-headset"
-         :size :smaller
-         :on-click #()]
+       [#_[re-com/md-icon-button
+           :md-icon-name "zmdi-headset"
+           :size :smaller
+           :on-click #()]
         [re-com/md-icon-button
          :md-icon-name "zmdi-play"
          :size :smaller
-         :on-click #()]
-        [re-com/md-icon-button
-         :md-icon-name "zmdi-download"
-         :size :smaller
-         :on-click #(re-frame/dispatch [:download-audio
-                                        url
-                                        (str "[" author "] - " name)])]]]]]))
+         :on-click #(re-frame/dispatch [:play-video (:video/url item)])]
+        [:a
+         {:href url}
+         [re-com/md-icon-button
+          :md-icon-name "zmdi-download"
+          :size :smaller
+          :on-click #()]]]]]]))
 
 (defn media-items [items]
   (fn [items]
     [re-com/v-box
      :class "media-items"
-     :children (for [item items]
+     :children (for [item (reverse (sort-by :media/published-at items))]
                  [media-item item])]))
 
 (defn media-display [{:keys [term results]}]
@@ -87,26 +88,21 @@
                      [[re-com/gap :size "39px"]
                       [media-items results]]]
                     ;;;
-                    (re-com/v-box
-                     :width "100%"
-                     :align :center
-                     :children
-                     (for [group (->> results
-                                      (sort-by #(count (second %)))
-                                      (reverse)
-                                      (partition-all 3))]
-                       [re-com/h-box
-                        :width "80%"
-                        :justify :around
-                        :children (for [media group]
-                                    [re-com/v-box
-                                     :width "40%"
-                                     :align :center
-                                     :children
-                                     [[re-com/title
-                                       :label (first media)
-                                       :level :level3]
-                                      [media-items (second media)]]])])))]])))
+                    [:div.pure-g
+                     {:style {:width "100%"
+                              :padding "10px"}}
+                     (for [media results]
+                       ^{:key (first media)}
+                       [:div.pure-u-1.pure-u-md-1-2.pure-u-lg-1-3
+                        {:style {:padding "10px"}}
+                        [re-com/v-box
+                         :width "100%"
+                         :align :center
+                         :children
+                         [[re-com/title
+                           :label (first media)
+                           :level :level3]
+                          [media-items (second media)]]]])])]])))
 
 
 (defn main-panel []

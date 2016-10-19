@@ -33,14 +33,13 @@
    {:source-paths ["dev-src"]
     :dependencies [[com.cemerick/piggieback "0.2.1"]
                    [org.clojure/tools.nrepl "0.2.12"]
-                   #_[ring/ring-defaults "0.1.5"]
-                   #_[compojure "1.4.0"]
                    [figwheel "0.5.4-3"]
                    [figwheel-sidecar "0.5.4-3"]]
 
     :plugins      [[lein-figwheel "0.5.4-3"]
-                   [lein-doo "0.1.6"]]
-    }}
+                   [lein-doo "0.1.6"]]}
+   :data {:source-paths ["data-src"]
+          :dependencies [[amazonica "0.3.73"]]}}
 
   :cljsbuild
   {:builds
@@ -64,7 +63,5 @@
      :source-paths ["src/cljs" "test/cljs"]
      :compiler     {:output-to     "resources/public/js/compiled/test.js"
                     :main          espdig-www.runner
-                    :optimizations :none}}
-    ]}
-
-  )
+                    :optimizations :none}}]}
+  :aliases {"upload-data" ["with-profile" "data" "run" "-m" "espdig-www.upload-data"]})

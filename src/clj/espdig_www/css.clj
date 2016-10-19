@@ -22,7 +22,11 @@
     :height (px 24)
     :cursor :pointer}
    [:&:hover
-    {:background-color 'greenyellow}]]
+    {:background-color 'greenyellow}]
+   [:i
+    {:color 'slateblue}
+    [:&:hover
+     {:color 'grey}]]]
 
   [:.media-item-label-container
    {:display :flex
