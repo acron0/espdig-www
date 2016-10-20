@@ -3,11 +3,13 @@
 (def lang (atom :en-gb))
 
 (def strings
-  {:string/title "eSports Voice"
+  {:string/title "eSPOP!"
+   :string/subtitle "eSports opinions from the Interwebz"
    :string/search-placeholder {:en-gb "Search"
                                :de-de "Suchen"}
    :string/recent-media "Recent Uploads"
    :string/search-results "Search Results"
+   :string/no-matches "No matches"
    :string/data-error "Failed to retrieve application data."})
 
 (defn get-string

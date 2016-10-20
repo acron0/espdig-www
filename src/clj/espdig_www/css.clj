@@ -8,8 +8,11 @@
   [[(px 1) :solid 'silver]])
 
 (defstyles screen
-  [:html {:overflow-y :scroll}]
+  [:html {:overflow-y :scroll
+          :min-width (px 300)}]
 
+  [:.level4 {:margin-bottom (px 10)
+             :font-weight 400}]
   [:.level3 {:font-size (em 1.2)}]
 
   [:.media-items
@@ -36,12 +39,13 @@
    {:white-space :nowrap
     :overflow :hidden
     :text-overflow :ellipsis
-    :min-width (px 0)}]
+    :min-width (px 0)}
+   [:strong
+    {:margin-right (px 5)}]]
 
   [:.widget-container
    {:min-height (px 40)
-    :margin-top (px 15)
-    :width (percent 30)}]
+    :margin-top (px 15)}]
 
   [:.download-widget
    {:width (percent 100)}

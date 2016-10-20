@@ -39,3 +39,10 @@
  :update-search
  (fn  [app-state [_ value]]
    (assoc app-state :app/search value)))
+
+(re-frame/register-handler
+ :play-video
+ (fn  [app-state [_ url]]
+   (assoc app-state
+          :app/primary-action :play-video
+          :app/primary-context url)))

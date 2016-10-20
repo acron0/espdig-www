@@ -7,20 +7,28 @@
 
 (defn title []
   (fn []
-    [re-com/title
-     :label (get-string :string/title)
-     :level :level1]))
+    [re-com/v-box
+     :justify :center
+     :align :center
+     :children [[re-com/title
+                 :label (get-string :string/title)
+                 :level :level1]
+                [re-com/title
+                 :label (get-string :string/subtitle)
+                 :level :level4]]]))
 
 (defn search-input [input]
   (fn [input]
     [re-com/h-box
      :align :center
      :width "40%"
-     :children [[re-com/md-icon-button
-                 :md-icon-name "zmdi-search"
-                 :size :smaller
-                 :style {:pointer-events "none"}
-                 :on-click #()]
+     :children [[re-com/box
+                 :size "16px"
+                 :child [re-com/md-icon-button
+                         :md-icon-name "zmdi-search"
+                         :size :smaller
+                         :style {:pointer-events "none"}
+                         :on-click #()]]
                 [re-com/gap :size "5px"]
                 [re-com/input-text
                  :model input
@@ -29,11 +37,10 @@
                  :placeholder (get-string :string/search-placeholder)
                  :on-change #(re-frame/dispatch [:update-search %])]]]))
 
-(defn media-item [item]
+(defn media-item [item author?]
   (fn [{:keys [media/name
                audio/url
                media/author] :as item}]
-    (println (keys item))
     [re-com/h-box
      :class "media-item"
      :justify :between
@@ -42,7 +49,9 @@
        :class "media-item-label-container"
        :size "auto"
        :align :center
-       :child [:div.media-item-label name]]
+       :child (if author?
+                [:div.media-item-label [:strong author] name]
+                [:div.media-item-label name])]
       [re-com/h-box
        :align :center
        :children
@@ -53,7 +62,7 @@
         [re-com/md-icon-button
          :md-icon-name "zmdi-play"
          :size :smaller
-         :on-click #(re-frame/dispatch [:play-video (:video/url item)])]
+         :on-click #(re-frame/dispatch [:play-video (:media/id item)])]
         [:a
          {:href url}
          [re-com/md-icon-button
@@ -61,12 +70,14 @@
           :size :smaller
           :on-click #()]]]]]]))
 
-(defn media-items [items]
+(defn media-items [items author?]
   (fn [items]
     [re-com/v-box
      :class "media-items"
-     :children (for [item (reverse (sort-by :media/published-at items))]
-                 [media-item item])]))
+     :children (for [item (->> items
+                               (sort-by :media/published-at)
+                               (reverse))]
+                 [media-item item author?])]))
 
 (defn media-display [{:keys [term results]}]
   (fn [{:keys [term results]}]
@@ -85,8 +96,14 @@
                     [re-com/v-box
                      :width "50%"
                      :children
-                     [[re-com/gap :size "39px"]
-                      [media-items results]]]
+                     [[re-com/gap :size "20px"]
+                      (if (not-empty results)
+                        [media-items results true]
+                        [re-com/box
+                         :align :center
+                         :child
+                         [re-com/label
+                          :label (get-string :string/no-matches)]])]]
                     ;;;
                     [:div.pure-g
                      {:style {:width "100%"
@@ -102,7 +119,11 @@
                          [[re-com/title
                            :label (first media)
                            :level :level3]
-                          [media-items (second media)]]]])])]])))
+                          [media-items (->> media
+                                            (second)
+                                            (sort-by :media/published-at)
+                                            (reverse)
+                                            (take 10)) false]]]])])]])))
 
 
 (defn main-panel []
@@ -129,11 +150,11 @@
            :children [[title]
                       [search-input (:term @search)]
                       [re-com/gap :size "10px"]
-                      (when @action
+                      (when (:action @action)
                         [re-com/box
                          :class "widget-container"
                          :child
-                         (case @action
-                           :downloading [widget/download]
-                           [:div])])
+                         (case (:action @action)
+                           :play-video [widget/play-video (:context @action)]
+                           [:div "Unknown action"])])
                       [media-display @search]]]]]))))

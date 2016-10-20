@@ -23,9 +23,5 @@
 (re-frame/register-sub
  :current-action
  (fn [db]
-   (reaction (:app/primary-action @db))))
-
-(re-frame/register-sub
- :download-action
- (fn [db]
-   (reaction (:download/context @db))))
+   (reaction {:action (:app/primary-action @db)
+              :context (:app/primary-context @db)})))
