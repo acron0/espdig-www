@@ -8,12 +8,21 @@
   [[(px 1) :solid 'silver]])
 
 (defstyles screen
-  [:html {:overflow-y :scroll
-          :min-width (px 300)}]
+  [:html :body
+   {:overflow-y :scroll
+    :overflow-x :hidden
+    :max-width (percent 100)
+    :min-width (px 300)}]
 
   [:.level4 {:margin-bottom (px 10)
              :font-weight 400}]
   [:.level3 {:font-size (em 1.2)}]
+
+  [:.logo
+   {:margin (px 10)}]
+
+  [:.about
+   {:margin (px 10)}]
 
   [:.media-items
    {:border-bottom media-border
@@ -57,4 +66,7 @@
       :right (px 32)}]
     [:.rc-md-icon-button
      {:position "absolute"
-      :right "0"}]]])
+      :right "0"}]]]
+
+  [:.search-results
+   {:max-width (px 800)}])

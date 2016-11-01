@@ -3,16 +3,16 @@
   (:require [re-frame.core :as re-frame]
             [re-com.core :as re-com]
             [espdig-www.strings :refer [get-string]]
-            [espdig-www.widgets :as widget]))
+            [espdig-www.widgets :as widget]
+            [goog.string :as gstr]))
 
 (defn title []
   (fn []
     [re-com/v-box
      :justify :center
      :align :center
-     :children [[re-com/title
-                 :label (get-string :string/title)
-                 :level :level1]
+     :children [[:img.logo
+                 {:src "/img/logo.png"}]
                 [re-com/title
                  :label (get-string :string/subtitle)
                  :level :level4]]]))
@@ -36,6 +36,13 @@
                  :width "95%"
                  :placeholder (get-string :string/search-placeholder)
                  :on-change #(re-frame/dispatch [:update-search %])]]]))
+
+(defn fix-url
+  [url]
+  (let [x       (.lastIndexOf url "/")
+        frag    (subs url (inc x))
+        encoded (gstr/urlEncode frag)]
+    (str (subs url 0 x) "/" encoded)))
 
 (defn media-item [item author?]
   (fn [{:keys [media/name
@@ -64,7 +71,7 @@
          :size :smaller
          :on-click #(re-frame/dispatch [:play-video (:media/id item)])]
         [:a
-         {:href url}
+         {:href (fix-url url)}
          [re-com/md-icon-button
           :md-icon-name "zmdi-download"
           :size :smaller
@@ -94,7 +101,8 @@
                    :level :level2]
                   (if searching?
                     [re-com/v-box
-                     :width "50%"
+                     :class "search-results"
+                     :width "90%"
                      :children
                      [[re-com/gap :size "20px"]
                       (if (not-empty results)

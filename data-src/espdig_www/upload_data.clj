@@ -10,7 +10,7 @@
 (def dir "resources/public")
 (def blacklist #{"data.json"})
 (def profile "espdig")
-(def bucket "espdig-www")
+(def bucket "www.espop.net")
 
 (defn -main
   "Uploads the data to S3"
